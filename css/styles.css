@@ -47,6 +47,15 @@
   box-sizing: border-box;
 }
 
+@media screen and (max-width: 600px) {
+  .mycv img {
+  	border: solid rgb(35, 170, 228) 5px;
+  	border-radius: 5px;
+  	margin-top: 5px;
+  	width: 300px !important;
+  }
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -10140,4 +10149,11 @@ section.resume-section .resume-section-content {
   margin-top: -50px;
   text-align: center;
   width: 200px;
+}
+
+.mycv img {
+	border: solid rgb(35, 170, 228) 5px;
+	border-radius: 5px;
+	margin-top: 5px;
+	width: 600px;
 }
