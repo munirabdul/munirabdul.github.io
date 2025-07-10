@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kumpulan Sertifikat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 15px;
+    }
+    .card-content h3 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .card-content p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Kumpulan Sertifikat Saya</h1>
+    <p>Berikut adalah daftar sertifikat dan deskripsi pelatihan yang telah saya ikuti</p>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <img src="sertifikat1.jpg" alt="Sertifikat Data Analysis">
+      <div class="card-content">
+        <h3>Data Analysis with Excel</h3>
+        <p>Pelatihan tentang dasar-dasar analisis data menggunakan Microsoft Excel, mencakup pivot table, chart, dan formula penting.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="sertifikat2.jpg" alt="Sertifikat Python">
+      <div class="card-content">
+        <h3>Python for Data Science</h3>
+        <p>Memahami dasar pemrograman Python dan penerapannya dalam analisis data menggunakan library seperti Pandas dan Matplotlib.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="sertifikat3.jpg" alt="Sertifikat SQL">
+      <div class="card-content">
+        <h3>SQL Fundamentals</h3>
+        <p>Mempelajari struktur query SQL dasar, seperti SELECT, JOIN, dan WHERE untuk mengolah data dari database relasional.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 - Portofolio Sertifikat | Dibuat oleh [Nama Anda]
+  </footer>
+</body>
+</html>
