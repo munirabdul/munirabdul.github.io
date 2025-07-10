@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kumpulan Sertifikat</title>
+  <title>Sertifikat</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -35,10 +35,21 @@
     .card:hover {
       transform: scale(1.02);
     }
+    /* .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    } */
     .card img {
       width: 100%;
       height: 180px;
       object-fit: cover;
+      transition: object-fit 0.3s ease, height 0.3s ease;
+    }
+
+    .card:hover img {
+      object-fit: contain;
+      background-color: #000;
     }
     .card-content {
       padding: 15px;
@@ -52,6 +63,11 @@
       font-size: 0.95rem;
       color: #555;
     }
+    .penerbit {
+      font-size: 0.80rem;
+      color: #007BFF;
+      margin-top: 1rem;
+    }
     footer {
       text-align: center;
       padding: 20px;
@@ -62,16 +78,17 @@
 </head>
 <body>
   <header>
-    <h1>Kumpulan Sertifikat Saya</h1>
+    <h1>Sertifikat Saya</h1>
     <p>Berikut adalah daftar sertifikat dan deskripsi pelatihan yang telah saya ikuti</p>
   </header>
 
   <div class="container">
     <div class="card">
-      <img src="sertifikat1.jpg" alt="Sertifikat Data Analysis">
+      <img src="assets/sertifikat/BNSP.jpg" alt="Sertifikat Data Analysis">
       <div class="card-content">
-        <h3>Data Analysis with Excel</h3>
-        <p>Pelatihan tentang dasar-dasar analisis data menggunakan Microsoft Excel, mencakup pivot table, chart, dan formula penting.</p>
+        <h3>Programming and Software Developement</h3>
+        <p>Pelatihan tentang pengembangan website dan database menggunakan bahasa pemrograman PHP, mencakup front end dan back ed developement.</p>
+        <div class="penerbit">Penerbit: Badan Nasional Sertifikasi Profesi (BNSP) - 2019</div>
       </div>
     </div>
 
