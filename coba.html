@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Tambahkan Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="job-entry">
+      <h3>PT. Contoh Satu</h3>
+      <button
+        class="btn btn-outline-primary mt-2 toggle-btn"
+        type="button"
+        data-bs-toggle="collapse"
+      >
+        Tampilkan Jobdesk
+      </button>
+      <div class="collapse mt-2">
+        <div class="card card-body">• Contoh jobdesk...</div>
+      </div>
+    </div>
+
+    <div class="job-entry">
+      <h3>PT. Contoh Dua</h3>
+      <button
+        class="btn btn-outline-primary mt-2 toggle-btn"
+        type="button"
+        data-bs-toggle="collapse"
+      >
+        Tampilkan Jobdesk
+      </button>
+      <div class="collapse mt-2">
+        <div class="card card-body">• Contoh jobdesk lain...</div>
+      </div>
+    </div>
+
+    <!-- Tambahkan Bootstrap JS (wajib agar collapse berfungsi) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script untuk memberi ID unik pada setiap tombol dan target collapse -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const entries = document.querySelectorAll(".job-entry");
+
+        entries.forEach((entry, index) => {
+          const collapseId = `captionCollapse${index + 1}`;
+          const button = entry.querySelector(".toggle-btn");
+          const collapseDiv = entry.querySelector(".collapse");
+
+          if (button && collapseDiv) {
+            button.setAttribute("data-bs-target", `#${collapseId}`);
+            collapseDiv.setAttribute("id", collapseId);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
