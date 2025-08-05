@@ -10588,7 +10588,6 @@ section.resume-section .resume-section-content {
 }
 
 .mycv img {
-  display: flex;
   border: solid rgb(35, 170, 228) 5px;
   border-radius: 5px;
   margin-top: 5px;
