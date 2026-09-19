@@ -76,9 +76,6 @@
           <button id="btn-today" class="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 text-sky-400 text-xs font-semibold rounded-lg border border-sky-500/30 transition">
             Hari Ini
           </button>
-          <button id="btn-reset" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-xs font-semibold rounded-lg border border-rose-500/30 transition">
-            Reset
-          </button>
           <button id="btn-login-trigger" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-lg border border-emerald-400/40 transition">
             <span id="btn-login-text">Login</span>
           </button>
@@ -297,13 +294,6 @@
     document.getElementById('btn-today').addEventListener('click', () => {
       const todayEl = document.getElementById('today-target');
       if (todayEl) todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-
-    document.getElementById('btn-reset').addEventListener('click', () => {
-      if (!isLoggedIn) return;
-      selectedDates.clear();
-      saveCloudData();
-      renderCalendar();
     });
 
     window.onload = loadCloudData;
