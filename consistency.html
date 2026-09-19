@@ -160,7 +160,7 @@
         if (data && data.dates) {
           selectedDates = new Set(data.dates);
         }
-        syncStatus.innerText = "Tersinkronisasi dengan Google Sheets";
+        syncStatus.innerHTML = '< Home <a href="https://munirabdul.github.io" target="_blank" rel="noopener noreferrer">Home</a>';
       } catch (e) {
         syncStatus.innerText = "Gagal Sync Cloud (Periksa URL Script)";
       }
