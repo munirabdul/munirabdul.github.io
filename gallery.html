@@ -7,8 +7,29 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; color: #333; padding: 20px; }
+    
+    /* Layout Header */
     header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; }
-    header h1 { font-size: 1.5rem; font-weight: 700; }
+    
+    /* Gaya Judul dan Link Home */
+    .header-title h1 { 
+      font-size: 1.2rem; /* Ukuran diperkecil */
+      font-weight: 700; 
+      line-height: 1.2;
+    }
+    
+    .header-title .home-link {
+      font-size: 0.8rem; /* Teks kecil */
+      color: #007bff;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    
+    .header-title .home-link:hover {
+      text-decoration: underline;
+    }
+
     .btn-upload { background-color: #007bff; color: white; border: none; padding: 10px 18px; font-size: 0.95rem; border-radius: 6px; cursor: pointer; }
     .btn-upload:hover { background-color: #0056b3; }
     .gallery-container { column-count: 1; column-gap: 20px; }
@@ -35,7 +56,10 @@
 <body>
 
   <header>
-    <h1>Dokumentasi Saya</h1>
+    <div class="header-title">
+      <h1>Dokumentasi Saya</h1>
+      <a href="https://munirabdul.github.io/" class="home-link">Home</a>
+    </div>
     <button class="btn-upload" onclick="handleUploadClick()">Upload Gambar</button>
   </header>
 
@@ -70,7 +94,6 @@
   <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxhcULw6jPjQ8kaESqg9m4b42mXBWe_oYVUDGLCYUqrKj4gFeWSxAfdP-9FzHsw8fUug/exec";
 
-    // Panggil dan tampilkan data saat halaman pertama kali dimuat/refresh
     window.addEventListener("DOMContentLoaded", fetchGalleryData);
 
     function fetchGalleryData() {
@@ -81,7 +104,6 @@
           if (statusMsg) statusMsg.remove();
 
           if (data && data.length > 0) {
-            // Urutkan dari data yang terbaru di atas
             data.reverse().forEach(item => {
               renderCard(item.fileUrl, item.title, item.description);
             });
@@ -135,7 +157,6 @@
           description: desc
         };
 
-        // Kirim file ke Google Apps Script / Drive
         fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify(payload)
