@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dokumentasi Saya</title>
   <style>
-    /* Reset & Gaya Dasarse Multi-Platform */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -19,7 +18,6 @@
       padding: 20px;
     }
 
-    /* Header Layout */
     header {
       display: flex;
       justify-content: space-between;
@@ -49,7 +47,6 @@
       background-color: #0056b3;
     }
 
-    /* Galeri Layout Masonry (Responsive) */
     .gallery-container {
       column-count: 1;
       column-gap: 20px;
@@ -80,7 +77,7 @@
 
     .gallery-card img {
       width: 100%;
-      height: auto; /* Mempertahankan rasio asli (portrait/landscape) */
+      height: auto;
       display: block;
     }
 
@@ -100,7 +97,6 @@
       line-height: 1.4;
     }
 
-    /* Modal / Popup */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -176,36 +172,25 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    .loading-text {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <h1>Dokumentasi Saya</h1>
     <button class="btn-upload" onclick="handleUploadClick()">Upload Gambar</button>
   </header>
 
-  <!-- Container Galeri Foto -->
   <main class="gallery-container" id="galleryContainer">
-    <!-- Item galeri contoh awal -->
-    <div class="gallery-card">
-      <img src="https://picsum.photos/400/600" alt="Contoh Portrait">
-      <div class="gallery-info">
-        <h3>Dokumentasi Portrait</h3>
-        <p>Ini adalah contoh foto berformat portrait yang mempertahankan rasio aslinya.</p>
-      </div>
-    </div>
-    <div class="gallery-card">
-      <img src="https://picsum.photos/600/400" alt="Contoh Landscape">
-      <div class="gallery-info">
-        <h3>Dokumentasi Landscape</h3>
-        <p>Ini adalah contoh foto berformat landscape yang menyesuaikan tinggi dan lebarnya.</p>
-      </div>
-    </div>
+    <p class="loading-text" id="loadingText">Memuat dokumentasi...</p>
   </main>
 
-  <!-- Popup Upload -->
   <div class="modal-overlay" id="uploadModal">
     <div class="modal">
       <h2>Upload Dokumentasi</h2>
@@ -231,8 +216,12 @@
   </div>
 
   <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxhcULw6jPjQ8kaESqg9m4b42mXBWe_oYVUDGLCYUqrKj4gFeWSxAfdP-9FzHsw8fUug/exec"; 
+
+    // Panggil data dari Google Drive saat halaman selesai dibuka
+    window.onload = function() {
+      loadGalleryData();
+    };
 
     function handleUploadClick() {
       const password = prompt("Masukkan password untuk upload:");
@@ -248,6 +237,26 @@
       document.getElementById("uploadForm").reset();
     }
 
+    function loadGalleryData() {
+      fetch(GOOGLE_SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          const loadingText = document.getElementById("loadingText");
+          if(loadingText) loadingText.remove();
+
+          if (data && data.length > 0) {
+            data.reverse().forEach(item => {
+              renderCard(item.fileUrl, item.title, item.description);
+            });
+          }
+        })
+        .catch(err => {
+          console.error("Gagal memuat data:", err);
+          const loadingText = document.getElementById("loadingText");
+          if(loadingText) loadingText.innerText = "Gagal memuat dokumentasi.";
+        });
+    }
+
     function submitForm(event) {
       event.preventDefault();
       
@@ -259,15 +268,15 @@
       if (!file) return;
 
       const submitBtn = document.getElementById("submitBtn");
-      submitBtn.innerText = "Proses...";
+      submitBtn.innerText = "Mengunggah...";
       submitBtn.disabled = true;
 
       const reader = new FileReader();
       reader.onload = function (e) {
         const base64Data = e.target.result.split(',')[1];
         
-        // Data yang dikirim ke Google Drive / Backend
         const payload = {
+          action: "upload",
           file: base64Data,
           mimeType: file.type,
           filename: file.name,
@@ -275,35 +284,34 @@
           description: desc
         };
 
-        /*
-        // INTEGRASI GOOGLE DRIVE (Diaktifkan jika URL Apps Script sudah ada)
+        // Kirim ke Google Drive via Apps Script
         fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify(payload)
         })
         .then(res => res.json())
         .then(data => {
-          renderCard(data.fileUrl, title, desc);
-          closeModal();
+          if (data.status === "success") {
+            renderCard(data.fileUrl, title, desc, true);
+            closeModal();
+          } else {
+            alert("Gagal upload: " + data.message);
+          }
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          alert("Terjadi kesalahan saat upload.");
+          console.error(err);
+        })
         .finally(() => {
           submitBtn.innerText = "Upload";
           submitBtn.disabled = false;
         });
-        */
-
-        // Tampilan sementara di browser langsung (Lokal/Pratinjau)
-        renderCard(e.target.result, title, desc);
-        submitBtn.innerText = "Upload";
-        submitBtn.disabled = false;
-        closeModal();
       };
 
       reader.readAsDataURL(file);
     }
 
-    function renderCard(imageSrc, title, description) {
+    function renderCard(imageSrc, title, description, isNew = false) {
       const gallery = document.getElementById("galleryContainer");
       const card = document.createElement("div");
       card.className = "gallery-card";
@@ -316,7 +324,11 @@
         </div>
       `;
       
-      gallery.prepend(card); // Menambahkan foto terbaru di paling atas
+      if (isNew) {
+        gallery.prepend(card);
+      } else {
+        gallery.appendChild(card);
+      }
     }
   </script>
 </body>
