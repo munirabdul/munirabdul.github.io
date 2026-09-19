@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kalender Windows Cloud Sync</title>
+  <title>Kalender Cloud Sync (Google Sheets)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@
         <div>
           <h1 id="header-title" class="text-lg font-bold text-white flex items-center gap-2">
             <i class="fa-regular fa-calendar-check text-green-400"></i>
-            <span>Loading...</span>
+            <span>Kalender Saya</span>
           </h1>
           <p id="sync-status" class="text-[11px] text-slate-400 mt-0.5">Mengkoneksikan Cloud...</p>
         </div>
@@ -133,11 +133,8 @@
   </div>
 
   <script>
-    // --- KONFIGURASI CLOUD API (JSONBin) ---
-    // API ini menyimpan array tanggal hijau secara online gratis
-    const JSONBIN_BIN_ID = "66f01234a6546c309b912345"; // ID Server Penyimpanan
-    const JSONBIN_API_KEY = "$2a$10$UnLq1R62/3c5Q98a9hXQ4uK0MvN530fWpX36/gO4A11qL4Y0G2"; // Key Akses
-    const JSONBIN_URL = `https://api.jsonbin.io/v3/b/66fa1d92e41b4d34e4389b21`; 
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+    const GOOGLE_SCRIPT_URL = "TEMPEL_URL_GOOGLE_SCRIPT_ANDA_DI_SINI";
 
     const CORRECT_PASSWORD = "251425";
     let isLoggedIn = false;
@@ -146,45 +143,46 @@
 
     const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
     const container = document.getElementById('calendar-scroll-container');
-    const headerTitle = document.getElementById('header-title');
     const syncStatus = document.getElementById('sync-status');
 
-    // Load Data dari Cloud
+    // Load Data dari Google Sheets
     async function loadCloudData() {
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("TEMPEL_URL")) {
+        syncStatus.innerText = "URL Google Script belum diisi!";
+        renderCalendar();
+        return;
+      }
+
       try {
-        syncStatus.innerText = "Mengambil data cloud...";
-        const res = await fetch('https://api.myjsononline.com/v1/records/48192842-8700-4796-9815-5d9c228d7123');
-        if (res.ok) {
-          const json = await res.json();
-          if (json.dates) {
-            selectedDates = new Set(json.dates);
-          }
+        syncStatus.innerText = "Memuat data Cloud (Google Sheets)...";
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+        if (data && data.dates) {
+          selectedDates = new Set(data.dates);
         }
-        syncStatus.innerText = "Tersinkronisasi dengan Cloud";
+        syncStatus.innerText = "Tersinkronisasi dengan Google Sheets";
       } catch (e) {
-        // Fallback jika offline
-        const local = localStorage.getItem('cal_dates');
-        if (local) selectedDates = new Set(JSON.parse(local));
-        syncStatus.innerText = "Mode Offline (Lokal)";
+        syncStatus.innerText = "Gagal Sync Cloud (Periksa URL Script)";
       }
       renderCalendar();
     }
 
-    // Save Data ke Cloud
+    // Save Data ke Google Sheets
     async function saveCloudData() {
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("TEMPEL_URL")) return;
+
       const datesArray = Array.from(selectedDates);
-      localStorage.setItem('cal_dates', JSON.stringify(datesArray));
-      
       try {
         syncStatus.innerText = "Menyimpan ke Cloud...";
-        await fetch('https://api.myjsononline.com/v1/records/48192842-8700-4796-9815-5d9c228d7123', {
-          method: 'PUT',
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Menghindari isu CORS Browser
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ dates: datesArray })
         });
         syncStatus.innerText = "Tersimpan di Cloud";
       } catch (e) {
-        syncStatus.innerText = "Gagal Sync Cloud (Tersimpan Lokal)";
+        syncStatus.innerText = "Gagal Menyimpan";
       }
     }
 
@@ -196,7 +194,6 @@
       container.innerHTML = '';
       const currentYear = today.getFullYear();
       
-      // Render 1 tahun (6 bulan sebelum & sesudah)
       for (let y = currentYear - 1; y <= currentYear + 1; y++) {
         for (let m = 0; m < 12; m++) {
           const monthDiv = document.createElement('div');
@@ -238,7 +235,7 @@
             dayCell.appendChild(numSpan);
 
             dayCell.addEventListener('click', () => {
-              if (!isLoggedIn) return; // Silent click jika belum login
+              if (!isLoggedIn) return;
               if (selectedDates.has(dateKey)) {
                 selectedDates.delete(dateKey);
                 dayCell.classList.remove('selected');
@@ -256,7 +253,6 @@
         }
       }
 
-      // Instant jump ke hari ini tanpa smooth
       setTimeout(() => {
         const todayEl = document.getElementById('today-target');
         if (todayEl) {
@@ -265,7 +261,6 @@
       }, 50);
     }
 
-    // Modal & Login Controls
     function openLoginModal() {
       document.getElementById('login-modal').classList.remove('hidden');
       document.getElementById('password-input').value = '';
@@ -311,7 +306,6 @@
       renderCalendar();
     });
 
-    // Jalankan saat pertama dibuka
     window.onload = loadCloudData;
   </script>
 </body>
