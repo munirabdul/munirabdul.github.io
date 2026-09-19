@@ -1,546 +1,318 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalender Interaktif Windows</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
-            min-height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalender Windows Cloud Sync</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+    }
+    .no-scrollbar::-webkit-scrollbar { width: 4px; }
+    .no-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
 
-        .no-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .no-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
-        .no-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-        }
-        .no-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .day-cell {
-            position: relative;
-            user-select: none;
-            transition: all 0.2s ease;
-        }
-
-        .day-number {
-            position: relative;
-            z-index: 10;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-        }
-
-        .day-cell.selected .day-number {
-            background-color: #22c55e;
-            color: #ffffff !important;
-            font-weight: 700;
-            box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
-            transform: scale(1.06);
-        }
-
-        .day-cell.is-today .day-number {
-            border: 2px solid #38bdf8;
-            color: #38bdf8;
-            font-weight: 700;
-        }
-
-        .day-cell.is-today::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 5px;
-            background-color: #38bdf8;
-            border-radius: 50%;
-            box-shadow: 0 0 6px #38bdf8;
-            z-index: 12;
-        }
-
-        .day-cell.is-today.selected .day-number {
-            border: 2px solid #ffffff;
-            background-color: #22c55e;
-            color: #ffffff !important;
-        }
-
-        .day-cell:not(.selected):hover .day-number {
-            background-color: rgba(255, 255, 255, 0.15);
-            cursor: pointer;
-        }
-
-        .day-cell.selected:hover .day-number {
-            cursor: pointer;
-            filter: brightness(1.1);
-        }
-
-        .glass-card {
-            background: rgba(30, 41, 59, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .month-header-sticky {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .is-locked .day-cell {
-            cursor: not-allowed !important;
-        }
-        .is-locked .day-cell:hover .day-number {
-            background-color: transparent !important;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-8px); }
-            40%, 80% { transform: translateX(8px); }
-        }
-        .animate-shake {
-            animation: shake 0.4s ease-in-out;
-        }
-    </style>
+    .day-cell { position: relative; user-select: none; }
+    .day-number {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: all 0.2s ease;
+      font-size: 0.875rem;
+    }
+    .day-cell.selected .day-number {
+      background-color: #22c55e;
+      color: #ffffff !important;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+    }
+    .day-cell.is-today .day-number {
+      border: 2px solid #38bdf8;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .day-cell.is-today::after {
+      content: '';
+      position: absolute; bottom: 2px; left: 50%;
+      transform: translateX(-50%);
+      width: 5px; height: 5px;
+      background-color: #38bdf8;
+      border-radius: 50%;
+    }
+    .day-cell.is-today.selected .day-number {
+      border: 2px solid #ffffff;
+      background-color: #22c55e;
+      color: #ffffff !important;
+    }
+    .month-header-sticky {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen relative">
+<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen">
 
-    <div class="w-full max-w-4xl flex flex-col h-[90vh] max-h-[850px] gap-4">
+  <div class="w-full max-w-2xl flex flex-col h-[90vh] max-h-[800px] gap-4">
+    
+    <!-- Kalender Box -->
+    <div class="w-full bg-slate-900/80 backdrop-blur-xl rounded-2xl flex flex-col overflow-hidden shadow-2xl border border-slate-700/50 flex-1">
+      
+      <!-- Top Bar -->
+      <div class="p-4 border-b border-slate-700/60 flex items-center justify-between bg-slate-800/40">
+        <div>
+          <h1 id="header-title" class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-regular fa-calendar-check text-green-400"></i>
+            <span>Loading...</span>
+          </h1>
+          <p id="sync-status" class="text-[11px] text-slate-400 mt-0.5">Mengkoneksikan Cloud...</p>
+        </div>
         
-        <!-- Main Section: Kalender Vertikal -->
-        <div id="calendar-wrapper" class="w-full glass-card rounded-2xl flex flex-col overflow-hidden shadow-2xl border border-slate-700/50 flex-1 is-locked">
+        <div class="flex items-center gap-2">
+          <button id="btn-today" class="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 text-sky-400 text-xs font-semibold rounded-lg border border-sky-500/30 transition">
+            Hari Ini
+          </button>
+          <button id="btn-reset" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-xs font-semibold rounded-lg border border-rose-500/30 transition">
+            Reset
+          </button>
+          <button id="btn-login-trigger" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-lg border border-emerald-400/40 transition">
+            <span id="btn-login-text">Login</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nama Hari Header -->
+      <div class="grid grid-cols-7 bg-slate-950 text-center py-2 text-xs font-semibold text-slate-400 border-b border-slate-800">
+        <span class="text-rose-400">Ming</span>
+        <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span>
+        <span class="text-sky-400">Sab</span>
+      </div>
+
+      <!-- Wadah Scroll Kalender -->
+      <div id="calendar-scroll-container" class="flex-1 overflow-y-auto no-scrollbar p-3 space-y-6"></div>
+    </div>
+
+    <!-- Quote Box Footer -->
+    <div class="bg-slate-900/80 backdrop-blur-xl rounded-2xl p-4 text-center border border-slate-700/50 shadow-xl flex items-center justify-center gap-3">
+      <i class="fa-solid fa-quote-left text-emerald-400/50 text-xl"></i>
+      <p class="text-base sm:text-lg font-semibold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 italic">
+        "Consistency is my identity."
+      </p>
+      <i class="fa-solid fa-quote-right text-emerald-400/50 text-xl"></i>
+    </div>
+
+  </div>
+
+  <!-- Modal Login -->
+  <div id="login-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl relative">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="text-center mb-5">
+        <h3 class="text-base font-bold text-white">Login Akun</h3>
+        <p class="text-xs text-slate-400 mt-1">Masukkan password untuk mengedit kalender.</p>
+      </div>
+
+      <form onsubmit="handleLoginSubmit(event)">
+        <div class="relative flex items-center mb-2">
+          <input type="password" id="password-input" placeholder="Password" maxlength="20"
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 pr-12 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <button type="submit" class="absolute right-1.5 w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center">
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+        <p id="error-message" class="text-xs text-rose-400 min-h-[18px] hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // --- KONFIGURASI CLOUD API (JSONBin) ---
+    // API ini menyimpan array tanggal hijau secara online gratis
+    const JSONBIN_BIN_ID = "66f01234a6546c309b912345"; // ID Server Penyimpanan
+    const JSONBIN_API_KEY = "$2a$10$UnLq1R62/3c5Q98a9hXQ4uK0MvN530fWpX36/gO4A11qL4Y0G2"; // Key Akses
+    const JSONBIN_URL = `https://api.jsonbin.io/v3/b/66fa1d92e41b4d34e4389b21`; 
+
+    const CORRECT_PASSWORD = "251425";
+    let isLoggedIn = false;
+    const today = new Date();
+    let selectedDates = new Set();
+
+    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const container = document.getElementById('calendar-scroll-container');
+    const headerTitle = document.getElementById('header-title');
+    const syncStatus = document.getElementById('sync-status');
+
+    // Load Data dari Cloud
+    async function loadCloudData() {
+      try {
+        syncStatus.innerText = "Mengambil data cloud...";
+        const res = await fetch('https://api.myjsononline.com/v1/records/48192842-8700-4796-9815-5d9c228d7123');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.dates) {
+            selectedDates = new Set(json.dates);
+          }
+        }
+        syncStatus.innerText = "Tersinkronisasi dengan Cloud";
+      } catch (e) {
+        // Fallback jika offline
+        const local = localStorage.getItem('cal_dates');
+        if (local) selectedDates = new Set(JSON.parse(local));
+        syncStatus.innerText = "Mode Offline (Lokal)";
+      }
+      renderCalendar();
+    }
+
+    // Save Data ke Cloud
+    async function saveCloudData() {
+      const datesArray = Array.from(selectedDates);
+      localStorage.setItem('cal_dates', JSON.stringify(datesArray));
+      
+      try {
+        syncStatus.innerText = "Menyimpan ke Cloud...";
+        await fetch('https://api.myjsononline.com/v1/records/48192842-8700-4796-9815-5d9c228d7123', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dates: datesArray })
+        });
+        syncStatus.innerText = "Tersimpan di Cloud";
+      } catch (e) {
+        syncStatus.innerText = "Gagal Sync Cloud (Tersimpan Lokal)";
+      }
+    }
+
+    function formatDateKey(y, m, d) {
+      return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    }
+
+    function renderCalendar() {
+      container.innerHTML = '';
+      const currentYear = today.getFullYear();
+      
+      // Render 1 tahun (6 bulan sebelum & sesudah)
+      for (let y = currentYear - 1; y <= currentYear + 1; y++) {
+        for (let m = 0; m < 12; m++) {
+          const monthDiv = document.createElement('div');
+          monthDiv.className = 'month-block mb-6';
+          
+          const monthHeader = document.createElement('div');
+          monthHeader.className = 'month-header-sticky py-2 px-3 mb-2 text-sm font-bold text-slate-200 border-b border-slate-800 rounded-lg flex justify-between';
+          monthHeader.innerHTML = `<span>${months[m]} ${y}</span><span class="text-xs text-slate-500">${y}</span>`;
+          monthDiv.appendChild(monthHeader);
+
+          const daysGrid = document.createElement('div');
+          daysGrid.className = 'grid grid-cols-7 gap-y-1 text-center text-xs';
+
+          const firstDay = new Date(y, m, 1).getDay();
+          const totalDays = new Date(y, m + 1, 0).getDate();
+
+          for (let i = 0; i < firstDay; i++) {
+            daysGrid.appendChild(document.createElement('div'));
+          }
+
+          for (let d = 1; d <= totalDays; d++) {
+            const dayCell = document.createElement('div');
+            dayCell.className = 'day-cell h-10 flex items-center justify-center cursor-pointer';
             
-            <!-- Header Atas Kalender & Navigasi Tombol -->
-            <div class="p-4 sm:p-5 border-b border-slate-700/60 flex flex-wrap items-center justify-between gap-3 bg-slate-800/40">
-                <div>
-                    <h1 id="current-focused-header" class="text-xl font-bold text-white tracking-wide flex items-center gap-2">
-                        <i class="fa-regular fa-calendar-check text-green-400"></i>
-                        <span>Loading...</span>
-                    </h1>
-                    <p class="text-xs text-slate-400 mt-0.5">Scroll vertikal untuk melihat bulan lain</p>
-                </div>
-                
-                <!-- Action Buttons: Hari Ini, Reset, & Login -->
-                <div class="flex items-center gap-2">
-                    <button id="btn-today" class="px-3 py-1.5 bg-sky-500/20 hover:bg-sky-500/30 text-sky-400 text-xs font-semibold rounded-lg border border-sky-500/30 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-location-crosshairs"></i>
-                        Hari Ini
-                    </button>
-                    <button id="btn-reset" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-xs font-semibold rounded-lg border border-rose-500/30 transition flex items-center gap-1.5" title="Hapus semua penanda hijau">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        Reset
-                    </button>
-                    <button id="btn-login-trigger" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-lg shadow-emerald-600/30 border border-emerald-400/40 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        <span id="btn-login-text">Login</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Nama Hari Header -->
-            <div class="grid grid-cols-7 bg-slate-900/80 text-center py-2.5 text-xs font-semibold text-slate-400 border-b border-slate-700/50">
-                <span class="text-rose-400">Ming</span>
-                <span>Sen</span>
-                <span>Sel</span>
-                <span>Rab</span>
-                <span>Kam</span>
-                <span>Jum</span>
-                <span class="text-sky-400">Sab</span>
-            </div>
-
-            <!-- Wadah Scroll Bulan-Bulan -->
-            <div id="calendar-scroll-container" class="flex-1 overflow-y-auto no-scrollbar p-3 space-y-8 scroll-smooth">
-            </div>
-        </div>
-
-        <!-- Quote Box Footer -->
-        <div class="glass-card rounded-2xl p-4 sm:p-5 text-center border border-slate-700/50 shadow-xl flex items-center justify-center relative overflow-hidden group">
-            <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition duration-500"></div>
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl group-hover:bg-sky-500/20 transition duration-500"></div>
-            <div class="relative z-10 flex items-center justify-center gap-3">
-                <i class="fa-solid fa-quote-left text-emerald-400/50 text-xl sm:text-2xl"></i>
-                <p class="text-lg sm:text-xl font-semibold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 font-serif italic">
-                    "Consistency is my identity."
-                </p>
-                <i class="fa-solid fa-quote-right text-emerald-400/50 text-xl sm:text-2xl"></i>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Modal Popup Login -->
-    <div id="login-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div id="modal-card" class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 w-full max-w-sm shadow-2xl relative">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <h3 class="text-lg font-bold text-white">Otentikasi Login</h3>
-                <p class="text-xs text-slate-400 mt-1">Masukkan kata sandi angka untuk membuka akses aktivitas kalender.</p>
-            </div>
-
-            <form id="login-form" onsubmit="handleLoginSubmit(event)">
-                <div class="mb-2">
-                    <label class="block text-xs font-semibold text-slate-300 mb-2">Password Akses</label>
-                    <div class="relative flex items-center">
-                        <input 
-                            type="password" 
-                            id="password-input" 
-                            placeholder="Masukkan password..."
-                            maxlength="20"
-                            class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-2.5 pr-12 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
-                            autocomplete="off"
-                        >
-                        <button 
-                            type="submit" 
-                            class="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg flex items-center justify-center transition shadow-md"
-                            title="Submit Password"
-                        >
-                            <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <p id="error-message" class="text-xs text-rose-400 min-h-[18px] mb-3 font-medium hidden"></p>
-
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-rose-600 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 border border-rose-400/30 translate-y-20 opacity-0 transition-all duration-300 z-50">
-        <i class="fa-solid fa-circle-exclamation text-base"></i>
-        <span id="toast-message">Notifikasi</span>
-    </div>
-
-    <script>
-        const months = [
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        ];
-
-        const CORRECT_PASSWORD = "251425";
-        let isLoggedIn = false;
-
-        const today = new Date();
-        
-        const savedDates = JSON.parse(localStorage.getItem('calendar_selected_dates') || '[]');
-        const selectedDates = new Set(savedDates);
-
-        let loadedStartYear, loadedStartMonth;
-        let loadedEndYear, loadedEndMonth;
-
-        const calendarWrapper = document.getElementById('calendar-wrapper');
-        const calendarContainer = document.getElementById('calendar-scroll-container');
-        const headerTitle = document.getElementById('current-focused-header');
-        const btnToday = document.getElementById('btn-today');
-        const btnReset = document.getElementById('btn-reset');
-        
-        const btnLoginTrigger = document.getElementById('btn-login-trigger');
-        const btnLoginText = document.getElementById('btn-login-text');
-        const loginModal = document.getElementById('login-modal');
-        const modalCard = document.getElementById('modal-card');
-        const passwordInput = document.getElementById('password-input');
-        const errorMessage = document.getElementById('error-message');
-
-        function saveToLocalStorage() {
-            localStorage.setItem('calendar_selected_dates', JSON.stringify(Array.from(selectedDates)));
-        }
-
-        function formatDateKey(year, month, day) {
-            const m = String(month + 1).padStart(2, '0');
-            const d = String(day).padStart(2, '0');
-            return `${year}-${m}-${d}`;
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        function createMonthView(year, month) {
-            const monthDiv = document.createElement('div');
-            monthDiv.className = 'month-block mb-6';
-            monthDiv.dataset.year = year;
-            monthDiv.dataset.month = month;
-
-            const monthHeader = document.createElement('div');
-            monthHeader.className = 'month-header-sticky py-2 px-3 mb-2 text-sm font-bold text-slate-200 border-b border-slate-700/40 rounded-lg flex justify-between items-center';
-            monthHeader.innerHTML = `
-                <span>${months[month]} ${year}</span>
-                <span class="text-[10px] font-normal text-slate-500">${year}</span>
-            `;
-            monthDiv.appendChild(monthHeader);
-
-            const daysGrid = document.createElement('div');
-            daysGrid.className = 'grid grid-cols-7 gap-y-1 text-center text-xs';
-
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-10';
-                daysGrid.appendChild(emptyCell);
-            }
-
-            for (let day = 1; day <= totalDays; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day-cell h-10 flex items-center justify-center';
-                
-                const dateKey = formatDateKey(year, month, day);
-                dayCell.dataset.date = dateKey;
-
-                const isToday = (
-                    day === today.getDate() &&
-                    month === today.getMonth() &&
-                    year === today.getFullYear()
-                );
-
-                if (isToday) dayCell.classList.add('is-today');
-                
-                if (selectedDates.has(dateKey)) {
-                    dayCell.classList.add('selected');
-                }
-
-                const numberSpan = document.createElement('span');
-                numberSpan.className = 'day-number';
-                numberSpan.innerText = day;
-
-                dayCell.appendChild(numberSpan);
-
-                dayCell.addEventListener('click', () => handleDateClick(dateKey, dayCell));
-
-                daysGrid.appendChild(dayCell);
-            }
-
-            monthDiv.appendChild(daysGrid);
-            return monthDiv;
-        }
-
-        function handleDateClick(dateKey, cellElement) {
-            if (!isLoggedIn) {
-                return;
+            const dateKey = formatDateKey(y, m, d);
+            
+            if (d === today.getDate() && m === today.getMonth() && y === today.getFullYear()) {
+              dayCell.classList.add('is-today');
+              dayCell.id = 'today-target';
             }
 
             if (selectedDates.has(dateKey)) {
+              dayCell.classList.add('selected');
+            }
+
+            const numSpan = document.createElement('span');
+            numSpan.className = 'day-number';
+            numSpan.innerText = d;
+            dayCell.appendChild(numSpan);
+
+            dayCell.addEventListener('click', () => {
+              if (!isLoggedIn) return; // Silent click jika belum login
+              if (selectedDates.has(dateKey)) {
                 selectedDates.delete(dateKey);
-                cellElement.classList.remove('selected');
-            } else {
+                dayCell.classList.remove('selected');
+              } else {
                 selectedDates.add(dateKey);
-                cellElement.classList.add('selected');
-            }
-
-            saveToLocalStorage();
-        }
-
-        function openLoginModal() {
-            if (!loginModal || !passwordInput || !errorMessage) return;
-            loginModal.classList.remove('hidden');
-            passwordInput.value = '';
-            errorMessage.innerText = '';
-            errorMessage.classList.add('hidden');
-            setTimeout(() => passwordInput.focus(), 150);
-        }
-
-        function closeLoginModal() {
-            if (loginModal) loginModal.classList.add('hidden');
-        }
-
-        function handleLoginSubmit(event) {
-            event.preventDefault();
-            const inputVal = passwordInput.value.trim();
-
-            if (inputVal === CORRECT_PASSWORD) {
-                isLoggedIn = true;
-                closeLoginModal();
-                updateSystemLockState();
-                showToast("Login berhasil! Akses kalender aktif.");
-            } else {
-                errorMessage.innerText = "Password salah! Silakan coba lagi.";
-                errorMessage.classList.remove('hidden');
-                modalCard.classList.add('animate-shake');
-                setTimeout(() => modalCard.classList.remove('animate-shake'), 400);
-            }
-        }
-
-        function updateSystemLockState() {
-            if (!calendarWrapper || !btnLoginText || !btnLoginTrigger) return;
-            
-            if (isLoggedIn) {
-                calendarWrapper.classList.remove('is-locked');
-                btnLoginText.innerText = "Logout";
-                btnLoginTrigger.className = "px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold rounded-lg shadow-lg shadow-rose-600/30 border border-rose-400/40 transition flex items-center gap-1.5";
-                const icon = btnLoginTrigger.querySelector('i');
-                if (icon) icon.className = "fa-solid fa-right-from-bracket";
-            } else {
-                calendarWrapper.classList.add('is-locked');
-                btnLoginText.innerText = "Login";
-                btnLoginTrigger.className = "px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-lg shadow-emerald-600/30 border border-emerald-400/40 transition flex items-center gap-1.5";
-                const icon = btnLoginTrigger.querySelector('i');
-                if (icon) icon.className = "fa-solid fa-right-to-bracket";
-            }
-        }
-
-        if (btnLoginTrigger) {
-            btnLoginTrigger.addEventListener('click', () => {
-                if (isLoggedIn) {
-                    isLoggedIn = false;
-                    updateSystemLockState();
-                    showToast("Anda telah logout. Kalender kembali terkunci.");
-                } else {
-                    openLoginModal();
-                }
+                dayCell.classList.add('selected');
+              }
+              saveCloudData();
             });
+
+            daysGrid.appendChild(dayCell);
+          }
+          monthDiv.appendChild(daysGrid);
+          container.appendChild(monthDiv);
         }
+      }
 
-        function initCalendar() {
-            const currentYear = today.getFullYear();
-            const currentMonth = today.getMonth();
-
-            loadedStartYear = currentYear;
-            loadedStartMonth = currentMonth - 3;
-            if (loadedStartMonth < 0) {
-                loadedStartMonth += 12;
-                loadedStartYear--;
-            }
-
-            loadedEndYear = currentYear;
-            loadedEndMonth = currentMonth + 5;
-            if (loadedEndMonth > 11) {
-                loadedEndMonth -= 12;
-                loadedEndYear++;
-            }
-
-            let tempY = loadedStartYear;
-            let tempM = loadedStartMonth;
-
-            while (tempY < loadedEndYear || (tempY === loadedEndYear && tempM <= loadedEndMonth)) {
-                calendarContainer.appendChild(createMonthView(tempY, tempM));
-                tempM++;
-                if (tempM > 11) {
-                    tempM = 0;
-                    tempY++;
-                }
-            }
-
-            updateSystemLockState();
-
-            setTimeout(() => {
-                scrollToToday(true);
-                updateStickyHeaderTitle();
-            }, 80);
+      // Instant jump ke hari ini tanpa smooth
+      setTimeout(() => {
+        const todayEl = document.getElementById('today-target');
+        if (todayEl) {
+          todayEl.scrollIntoView({ behavior: 'instant', block: 'center' });
         }
+      }, 50);
+    }
 
-        function prependMonth() {
-            loadedStartMonth--;
-            if (loadedStartMonth < 0) {
-                loadedStartMonth = 11;
-                loadedStartYear--;
-            }
-            const oldScrollHeight = calendarContainer.scrollHeight;
-            const newMonthEl = createMonthView(loadedStartYear, loadedStartMonth);
-            calendarContainer.insertBefore(newMonthEl, calendarContainer.firstChild);
-            calendarContainer.scrollTop += (calendarContainer.scrollHeight - oldScrollHeight);
-        }
+    // Modal & Login Controls
+    function openLoginModal() {
+      document.getElementById('login-modal').classList.remove('hidden');
+      document.getElementById('password-input').value = '';
+      document.getElementById('password-input').focus();
+    }
+    function closeLoginModal() {
+      document.getElementById('login-modal').classList.add('hidden');
+    }
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const val = document.getElementById('password-input').value;
+      if (val === CORRECT_PASSWORD) {
+        isLoggedIn = true;
+        closeLoginModal();
+        document.getElementById('btn-login-text').innerText = "Logout";
+        document.getElementById('btn-login-trigger').className = "px-3.5 py-1.5 bg-rose-600 text-white text-xs font-semibold rounded-lg shadow-lg border border-rose-400/40 transition";
+      } else {
+        const err = document.getElementById('error-message');
+        err.innerText = "Password Salah!";
+        err.classList.remove('hidden');
+      }
+    }
 
-        function appendMonth() {
-            loadedEndMonth++;
-            if (loadedEndMonth > 11) {
-                loadedEndMonth = 0;
-                loadedEndYear++;
-            }
-            const newMonthEl = createMonthView(loadedEndYear, loadedEndMonth);
-            calendarContainer.appendChild(newMonthEl);
-        }
+    document.getElementById('btn-login-trigger').addEventListener('click', () => {
+      if (isLoggedIn) {
+        isLoggedIn = false;
+        document.getElementById('btn-login-text').innerText = "Login";
+        document.getElementById('btn-login-trigger').className = "px-3.5 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow-lg border border-emerald-400/40 transition";
+      } else {
+        openLoginModal();
+      }
+    });
 
-        if (calendarContainer) {
-            calendarContainer.addEventListener('scroll', () => {
-                if (calendarContainer.scrollTop < 120) prependMonth();
-                if (calendarContainer.scrollHeight - calendarContainer.scrollTop - calendarContainer.clientHeight < 120) appendMonth();
-                updateStickyHeaderTitle();
-            });
-        }
+    document.getElementById('btn-today').addEventListener('click', () => {
+      const todayEl = document.getElementById('today-target');
+      if (todayEl) todayEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
 
-        function updateStickyHeaderTitle() {
-            if (!calendarContainer || !headerTitle) return;
-            const monthBlocks = calendarContainer.querySelectorAll('.month-block');
-            const containerTop = calendarContainer.getBoundingClientRect().top;
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (!isLoggedIn) return;
+      selectedDates.clear();
+      saveCloudData();
+      renderCalendar();
+    });
 
-            monthBlocks.forEach(block => {
-                const rect = block.getBoundingClientRect();
-                if (rect.top - containerTop <= 80 && rect.bottom - containerTop > 40) {
-                    const y = block.dataset.year;
-                    const m = parseInt(block.dataset.month);
-                    const titleSpan = headerTitle.querySelector('span');
-                    if (titleSpan) titleSpan.innerText = `${months[m]} ${y}`;
-                }
-            });
-        }
-
-        function scrollToToday(smooth = true) {
-            if (!calendarContainer) return;
-            const todayEl = calendarContainer.querySelector('.day-cell.is-today');
-            if (todayEl) {
-                todayEl.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'center' });
-            }
-        }
-
-        if (btnToday) {
-            btnToday.addEventListener('click', () => scrollToToday(true));
-        }
-
-        if (btnReset) {
-            btnReset.addEventListener('click', () => {
-                if (!isLoggedIn) return;
-                if (selectedDates.size === 0) return;
-                
-                selectedDates.clear();
-                saveToLocalStorage();
-
-                const allSelected = calendarContainer.querySelectorAll('.day-cell.selected');
-                allSelected.forEach(el => el.classList.remove('selected'));
-            });
-        }
-
-        window.onload = function() {
-            initCalendar();
-        };
-    </script>
+    // Jalankan saat pertama dibuka
+    window.onload = loadCloudData;
+  </script>
 </body>
 </html>
