@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi Saya</title>
+  <style>
+    /* Reset & Gaya Dasarse Multi-Platform */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 20px;
+    }
+
+    /* Header Layout */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .btn-upload {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-upload:hover {
+      background-color: #0056b3;
+    }
+
+    /* Galeri Layout Masonry (Responsive) */
+    .gallery-container {
+      column-count: 1;
+      column-gap: 20px;
+    }
+
+    @media (min-width: 600px) {
+      .gallery-container {
+        column-count: 2;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .gallery-container {
+        column-count: 3;
+      }
+    }
+
+    .gallery-card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      break-inside: avoid;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: auto; /* Mempertahankan rasio asli (portrait/landscape) */
+      display: block;
+    }
+
+    .gallery-info {
+      padding: 15px;
+    }
+
+    .gallery-info h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .gallery-info p {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Modal / Popup */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      padding: 24px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal h2 {
+      margin-bottom: 15px;
+      font-size: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.95rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      background: #e0e0e0;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Dokumentasi Saya</h1>
+    <button class="btn-upload" onclick="handleUploadClick()">Upload Gambar</button>
+  </header>
+
+  <!-- Container Galeri Foto -->
+  <main class="gallery-container" id="galleryContainer">
+    <!-- Item galeri contoh awal -->
+    <div class="gallery-card">
+      <img src="https://picsum.photos/400/600" alt="Contoh Portrait">
+      <div class="gallery-info">
+        <h3>Dokumentasi Portrait</h3>
+        <p>Ini adalah contoh foto berformat portrait yang mempertahankan rasio aslinya.</p>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <img src="https://picsum.photos/600/400" alt="Contoh Landscape">
+      <div class="gallery-info">
+        <h3>Dokumentasi Landscape</h3>
+        <p>Ini adalah contoh foto berformat landscape yang menyesuaikan tinggi dan lebarnya.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Popup Upload -->
+  <div class="modal-overlay" id="uploadModal">
+    <div class="modal">
+      <h2>Upload Dokumentasi</h2>
+      <form id="uploadForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="imgFile">Pilih Gambar</label>
+          <input type="file" id="imgFile" accept="image/*" required>
+        </div>
+        <div class="form-group">
+          <label for="imgTitle">Judul Gambar</label>
+          <input type="text" id="imgTitle" placeholder="Masukkan judul..." required>
+        </div>
+        <div class="form-group">
+          <label for="imgDesc">Deskripsi</label>
+          <textarea id="imgDesc" placeholder="Masukkan deskripsi..." required></textarea>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn-submit" id="submitBtn">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxhcULw6jPjQ8kaESqg9m4b42mXBWe_oYVUDGLCYUqrKj4gFeWSxAfdP-9FzHsw8fUug/exec"; 
+
+    function handleUploadClick() {
+      const password = prompt("Masukkan password untuk upload:");
+      if (password === "252525") {
+        document.getElementById("uploadModal").style.display = "flex";
+      } else if (password !== null) {
+        alert("Password salah!");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("uploadModal").style.display = "none";
+      document.getElementById("uploadForm").reset();
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      
+      const fileInput = document.getElementById("imgFile");
+      const title = document.getElementById("imgTitle").value;
+      const desc = document.getElementById("imgDesc").value;
+      const file = fileInput.files[0];
+
+      if (!file) return;
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.innerText = "Proses...";
+      submitBtn.disabled = true;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const base64Data = e.target.result.split(',')[1];
+        
+        // Data yang dikirim ke Google Drive / Backend
+        const payload = {
+          file: base64Data,
+          mimeType: file.type,
+          filename: file.name,
+          title: title,
+          description: desc
+        };
+
+        /*
+        // INTEGRASI GOOGLE DRIVE (Diaktifkan jika URL Apps Script sudah ada)
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+          renderCard(data.fileUrl, title, desc);
+          closeModal();
+        })
+        .catch(err => console.error(err))
+        .finally(() => {
+          submitBtn.innerText = "Upload";
+          submitBtn.disabled = false;
+        });
+        */
+
+        // Tampilan sementara di browser langsung (Lokal/Pratinjau)
+        renderCard(e.target.result, title, desc);
+        submitBtn.innerText = "Upload";
+        submitBtn.disabled = false;
+        closeModal();
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function renderCard(imageSrc, title, description) {
+      const gallery = document.getElementById("galleryContainer");
+      const card = document.createElement("div");
+      card.className = "gallery-card";
+      
+      card.innerHTML = `
+        <img src="${imageSrc}" alt="${title}">
+        <div class="gallery-info">
+          <h3>${title}</h3>
+          <p>${description}</p>
+        </div>
+      `;
+      
+      gallery.prepend(card); // Menambahkan foto terbaru di paling atas
+    }
+  </script>
+</body>
+</html>
