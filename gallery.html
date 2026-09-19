@@ -5,179 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dokumentasi Saya</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f4f6f8;
-      color: #333;
-      padding: 20px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .btn-upload {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn-upload:hover {
-      background-color: #0056b3;
-    }
-
-    .gallery-container {
-      column-count: 1;
-      column-gap: 20px;
-    }
-
-    @media (min-width: 600px) {
-      .gallery-container {
-        column-count: 2;
-      }
-    }
-
-    @media (min-width: 992px) {
-      .gallery-container {
-        column-count: 3;
-      }
-    }
-
-    .gallery-card {
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-      break-inside: avoid;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .gallery-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .gallery-info {
-      padding: 15px;
-    }
-
-    .gallery-info h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .gallery-info p {
-      font-size: 0.9rem;
-      color: #666;
-      line-height: 1.4;
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal {
-      background: white;
-      padding: 24px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 450px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    .modal h2 {
-      margin-bottom: 15px;
-      font-size: 1.25rem;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 0.95rem;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      height: 80px;
-    }
-
-    .modal-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn-cancel {
-      background: #e0e0e0;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .btn-submit {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .loading-text {
-      text-align: center;
-      color: #777;
-      padding: 20px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; color: #333; padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; }
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+    .btn-upload { background-color: #007bff; color: white; border: none; padding: 10px 18px; font-size: 0.95rem; border-radius: 6px; cursor: pointer; }
+    .btn-upload:hover { background-color: #0056b3; }
+    .gallery-container { column-count: 1; column-gap: 20px; }
+    @media (min-width: 600px) { .gallery-container { column-count: 2; } }
+    @media (min-width: 992px) { .gallery-container { column-count: 3; } }
+    .gallery-card { background: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; break-inside: avoid; overflow: hidden; display: inline-block; width: 100%; }
+    .gallery-card img { width: 100%; height: auto; display: block; }
+    .gallery-info { padding: 15px; }
+    .gallery-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .gallery-info p { font-size: 0.9rem; color: #666; line-height: 1.4; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal { background: white; padding: 24px; border-radius: 10px; width: 90%; max-width: 450px; }
+    .modal h2 { margin-bottom: 15px; font-size: 1.25rem; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
+    .form-group textarea { resize: vertical; height: 80px; }
+    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn-cancel { background: #e0e0e0; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+    .btn-submit { background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+    .status-msg { text-align: center; color: #666; padding: 20px; width: 100%; grid-column: 1 / -1; }
   </style>
 </head>
 <body>
@@ -188,7 +40,7 @@
   </header>
 
   <main class="gallery-container" id="galleryContainer">
-    <p class="loading-text" id="loadingText">Memuat dokumentasi...</p>
+    <p class="status-msg" id="statusMsg">Memuat foto dari Google Drive...</p>
   </main>
 
   <div class="modal-overlay" id="uploadModal">
@@ -216,12 +68,32 @@
   </div>
 
   <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxhcULw6jPjQ8kaESqg9m4b42mXBWe_oYVUDGLCYUqrKj4gFeWSxAfdP-9FzHsw8fUug/exec"; 
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxhcULw6jPjQ8kaESqg9m4b42mXBWe_oYVUDGLCYUqrKj4gFeWSxAfdP-9FzHsw8fUug/exec";
 
-    // Panggil data dari Google Drive saat halaman selesai dibuka
-    window.onload = function() {
-      loadGalleryData();
-    };
+    // Panggil dan tampilkan data saat halaman pertama kali dimuat/refresh
+    window.addEventListener("DOMContentLoaded", fetchGalleryData);
+
+    function fetchGalleryData() {
+      fetch(GOOGLE_SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          const statusMsg = document.getElementById("statusMsg");
+          if (statusMsg) statusMsg.remove();
+
+          if (data && data.length > 0) {
+            // Urutkan dari data yang terbaru di atas
+            data.reverse().forEach(item => {
+              renderCard(item.fileUrl, item.title, item.description);
+            });
+          } else {
+            document.getElementById("galleryContainer").innerHTML = '<p class="status-msg">Belum ada foto yang diunggah.</p>';
+          }
+        })
+        .catch(err => {
+          console.error("Gagal mengambil data:", err);
+          document.getElementById("statusMsg").innerText = "Gagal memuat data dari Google Drive.";
+        });
+    }
 
     function handleUploadClick() {
       const password = prompt("Masukkan password untuk upload:");
@@ -235,26 +107,6 @@
     function closeModal() {
       document.getElementById("uploadModal").style.display = "none";
       document.getElementById("uploadForm").reset();
-    }
-
-    function loadGalleryData() {
-      fetch(GOOGLE_SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          const loadingText = document.getElementById("loadingText");
-          if(loadingText) loadingText.remove();
-
-          if (data && data.length > 0) {
-            data.reverse().forEach(item => {
-              renderCard(item.fileUrl, item.title, item.description);
-            });
-          }
-        })
-        .catch(err => {
-          console.error("Gagal memuat data:", err);
-          const loadingText = document.getElementById("loadingText");
-          if(loadingText) loadingText.innerText = "Gagal memuat dokumentasi.";
-        });
     }
 
     function submitForm(event) {
@@ -276,7 +128,6 @@
         const base64Data = e.target.result.split(',')[1];
         
         const payload = {
-          action: "upload",
           file: base64Data,
           mimeType: file.type,
           filename: file.name,
@@ -284,7 +135,7 @@
           description: desc
         };
 
-        // Kirim ke Google Drive via Apps Script
+        // Kirim file ke Google Apps Script / Drive
         fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify(payload)
@@ -294,12 +145,13 @@
           if (data.status === "success") {
             renderCard(data.fileUrl, title, desc, true);
             closeModal();
+            alert("Berhasil disimpan ke Google Drive!");
           } else {
-            alert("Gagal upload: " + data.message);
+            alert("Gagal menyimpan: " + data.message);
           }
         })
         .catch(err => {
-          alert("Terjadi kesalahan saat upload.");
+          alert("Terjadi kesalahan koneksi saat upload.");
           console.error(err);
         })
         .finally(() => {
